@@ -19,12 +19,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Rute Khusus Manajerial & Superadmin (Contoh: Approval Cuti / Laporan Kehadiran Tim)
+// Rute Khusus Manajerial & Superadmin (Approval & Laporan Kehadiran Tim)
 Route::middleware(['auth', 'verified', 'role:manager,superadmin'])->group(function () {
     Route::get('/manager/approval', [AttendanceController::class, 'approval'])->name('manager.approval');
+    Route::get('/manager/report', [AttendanceController::class, 'report'])->name('manager.report');
 });
 
-// Rute Khusus Superadmin (Contoh: Kelola Data Master Karyawan / Pengaturan Sistem)
+// Rute Khusus Superadmin (Kelola Data Master Karyawan / Pengaturan Sistem)
 Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::get('/superadmin/users', [AttendanceController::class, 'manageUsers'])->name('superadmin.users');
 });

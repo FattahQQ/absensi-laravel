@@ -15,6 +15,10 @@ class Attendance extends Model
         'tanggal',
         'waktu',
         'status',
+        'latitude',
+        'longitude',
+        'foto',
+        'catatan',
     ];
 
     public function user()

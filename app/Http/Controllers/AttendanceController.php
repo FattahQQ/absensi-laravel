@@ -96,4 +96,50 @@ class AttendanceController extends Controller
 
         return redirect()->back()->with('success', 'Absensi ' . $request->tipe . ' berhasil dicatat!');
     }
+
+    // Fungsi untuk Rekapitulasi & Evaluasi Poin Disiplin Bulanan (Akses Manajer / Superadmin)
+    public function approval(Request $request)
+    {
+        $month = $request->input('month', date('m'));
+        $year = $request->input('year', date('Y'));
+
+        // Ambil data rekap absensi dan total poin per user pada bulan tersebut
+        $rekapAbsensi = Attendance::with('user')
+            ->whereMonth('tanggal', $month)
+            ->whereYear('tanggal', $year)
+            ->selectRaw('user_id, SUM(discipline_points) as total_points, COUNT(*) as total_hadir')
+            ->groupBy('user_id')
+            ->get();
+
+        // Evaluasi sanksi & potongan insentif berdasarkan total poin[cite: 1]
+        $evaluasiKaryawan = $rekapAbsensi->map(function ($item) {
+            $points = $item->total_points;
+            
+            if ($points >= 45) {
+                $tindakan = 'Teguran Tertulis III (Evaluasi hubungan kerja)';
+                $potonganInsentif = '100%';
+            } elseif ($points >= 26) {
+                $tindakan = 'Teguran Tertulis II';
+                $potonganInsentif = '60%';
+            } elseif ($points >= 11) {
+                $tindakan = 'Teguran Tertulis I';
+                $potonganInsentif = '40%';
+            } elseif ($points >= 6) {
+                $tindakan = 'Pembinaan oleh atasan';
+                $potonganInsentif = '30%';
+            } elseif ($points >= 1) {
+                $tindakan = 'Teguran lisan';
+                $potonganInsentif = '0% (NA)';
+            } else {
+                $tindakan = 'Tepat Waktu / Disiplin';
+                $potonganInsentif = '0%';
+            }
+
+            $item->tindakan = $tindakan;
+            $item->potongan_insentif = $potonganInsentif;
+            return $item;
+        });
+
+        return view('manager.approval', compact('evaluasiKaryawan', 'month', 'year'));
+    }
 }

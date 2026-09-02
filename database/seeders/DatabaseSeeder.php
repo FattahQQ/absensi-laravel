@@ -12,11 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Memanggil seeder untuk akun Superadmin dan data dummy absensi 100 karyawan
+        $this->call([
+            UserSeeder::class,
+            AttendanceDummySeeder::class,
+        ]);
     }
 }

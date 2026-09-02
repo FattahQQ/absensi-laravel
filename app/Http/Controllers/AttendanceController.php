@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -55,9 +56,9 @@ class AttendanceController extends Controller
         if ($request->tipe === 'MASUK') {
             if ($currentTime > $lateLimit) {
                 $status = 'Terlambat';
-                // Hitung selisih menit keterlambatan dari jam 08:30:00[cite: 1]
+                // Hitung selisih menit keterlambatan dari jam 08:30:00
                 $lateMinutes = Carbon::parse($standardStart)->diffInMinutes($now);
-                $disciplinePoints = 2; // Terlambat masuk kerja = 2 poin[cite: 1]
+                $disciplinePoints = 2; // Terlambat masuk kerja = 2 poin
                 $violationNote = 'Terlambat masuk kerja (>15 menit)';
             } else {
                 $status = 'Tepat Waktu';
@@ -111,7 +112,7 @@ class AttendanceController extends Controller
             ->groupBy('user_id')
             ->get();
 
-        // Evaluasi sanksi & potongan insentif berdasarkan total poin[cite: 1]
+        // Evaluasi sanksi & potongan insentif berdasarkan total poin
         $evaluasiKaryawan = $rekapAbsensi->map(function ($item) {
             $points = $item->total_points;
             
@@ -141,5 +142,19 @@ class AttendanceController extends Controller
         });
 
         return view('manager.approval', compact('evaluasiKaryawan', 'month', 'year'));
+    }
+
+    // Fungsi untuk Menampilkan Rekapitulasi Matriks Absensi (RealTime Today Record / Report)
+    public function report(Request $request)
+    {
+        $startDate = $request->input('start_date', now()->subDays(7)->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
+        
+        // Ambil data user beserta relasi absensinya berdasarkan range tanggal
+        $users = User::with(['attendances' => function($query) use ($startDate, $endDate) {
+            $query->whereBetween('tanggal', [$startDate, $endDate]);
+        }])->get();
+
+        return view('manager.report', compact('users', 'startDate', 'endDate'));
     }
 }

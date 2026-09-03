@@ -280,10 +280,10 @@
                 <i class="bi bi-chevron-down small"></i>
             </button>
             <div class="collapse submenu" id="masterMenu">
-                <a href="#" class="submenu-item"><span>• Master Utama</span> <i class="bi bi-chevron-right small text-muted"></i></a>
-                <a href="#" class="submenu-item"><span>• Master Kehadiran</span> <i class="bi bi-chevron-right small text-muted"></i></a>
-                <a href="#" class="submenu-item"><span>• Master Tambahan</span> <i class="bi bi-chevron-right small text-muted"></i></a>
-                <a href="#" class="submenu-item"><span>• Master Guard Patrol</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.utama') }}" class="submenu-item"><span>• Master Utama</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.kehadiran') }}" class="submenu-item"><span>• Master Kehadiran</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.tambahan') }}" class="submenu-item"><span>• Master Tambahan</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.guard-patrol') }}" class="submenu-item"><span>• Master Guard Patrol</span> <i class="bi bi-chevron-right small text-muted"></i></a>
             </div>
 
             <!-- Transaksi (Dropdown) -->
@@ -292,11 +292,11 @@
                 <i class="bi bi-chevron-down small"></i>
             </button>
             <div class="collapse submenu" id="transaksiMenu">
-                <a href="#" class="submenu-item"><span>- A. Ijin Telat/Pulang Awal</span></a>
-                <a href="#" class="submenu-item"><span>- B. Ijin Lupa Clock In/Out</span></a>
-                <a href="#" class="submenu-item"><span>- C. Ijin Tidak Hadir Masuk</span></a>
-                <a href="#" class="submenu-item"><span>- D. Ijin Lembur OverTime</span></a>
-                <a href="#" class="submenu-item"><span>- E. Ijin Jadwal Sementara</span></a>
+                <a href="{{ route('transaksi.telat') }}" class="submenu-item"><span>- A. Ijin Telat/Pulang Awal</span></a>
+                <a href="{{ route('transaksi.lupa') }}" class="submenu-item"><span>- B. Ijin Lupa Clock In/Out</span></a>
+                <a href="{{ route('transaksi.tidak-hadir') }}" class="submenu-item"><span>- C. Ijin Tidak Hadir Masuk</span></a>
+                <a href="{{ route('transaksi.lembur') }}" class="submenu-item"><span>- D. Ijin Lembur OverTime</span></a>
+                <a href="{{ route('transaksi.jadwal') }}" class="submenu-item"><span>- E. Ijin Jadwal Sementara</span></a>
             </div>
 
             <!-- Laporan (Dropdown) -->
@@ -305,9 +305,9 @@
                 <i class="bi bi-chevron-down small"></i>
             </button>
             <div class="collapse submenu" id="laporanMenu">
-                <a href="#" class="submenu-item"><span>- RealTime Today Record</span></a>
-                <a href="#" class="submenu-item"><span>- RealTime Monthly Report</span></a>
-                <a href="#" class="submenu-item"><span>- Visitor Capturing Report</span></a>
+                <a href="{{ route('manager.report') }}" class="submenu-item"><span>- RealTime Today Record</span></a>
+                <a href="{{ route('manager.approval') }}" class="submenu-item"><span>- RealTime Monthly Report</span></a>
+                <a href="{{ route('laporan.visitor-capturing') }}" class="submenu-item"><span>- Visitor Capturing Report</span></a>
             </div>
         </div>
     </div>
@@ -513,7 +513,15 @@
                                 <ul class="list-unstyled text-muted small mb-0 lh-lg" style="font-size: 0.825rem;">
                                     <li><strong>Nama:</strong> {{ Auth::user()->name }}</li>
                                     <li><strong>Email:</strong> {{ Auth::user()->email }}</li>
-                                    <li><strong>Hak Akses:</strong> Pegawai (Karyawan)</li>
+                                    <li><strong>Hak Akses:</strong> 
+                                        @if(Auth::user()->role == 'superadmin')
+                                            Superadmin
+                                        @elseif(Auth::user()->role == 'manager')
+                                            Manager
+                                        @else
+                                            Pegawai (Karyawan)
+                                        @endif
+                                    </li>
                                 </ul>
                             </div>
                         </div>

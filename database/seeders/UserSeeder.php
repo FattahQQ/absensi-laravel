@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         User::create([
             'name'     => 'Superadmin LSP',
             'email'    => 'superadmin@lspkimia.com',
-            'password' => Hash::make(''),
+            'password' => Hash::make('password123'),
             'role'     => 'superadmin', // Kunci agar terdeteksi sebagai superadmin
         ]);
     }

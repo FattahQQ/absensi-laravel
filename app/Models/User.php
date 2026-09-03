@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // pastikan field role juga ikut ter-fill jika ada
     ];
 
     /**
@@ -41,4 +42,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relasi ke model Attendance (Satu user memiliki banyak riwayat absensi)
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'user_id');
+    }
 }

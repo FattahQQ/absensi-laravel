@@ -12,6 +12,12 @@ Route::get('/', function () {
 // Rute Umum yang bisa diakses semua role yang sudah login & terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [AttendanceController::class, 'index'])->name('dashboard');
+    
+    // Mencegah error MethodNotAllowed jika URL /attendance diakses via GET
+    Route::get('/attendance', function () {
+        return redirect()->route('dashboard');
+    });
+    
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

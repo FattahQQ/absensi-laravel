@@ -107,7 +107,7 @@
         <div class="login-container">
             <div class="mb-4">
                 <h3 class="fw-bold text-dark mb-1">Masuk ke Portal</h3>
-                <p class="text-muted small">Autentikasi kredensial korporat Anda untuk melanjutkan.</p>
+                <p class="text-muted small">Masukkan kredensial Anda untuk melanjutkan ke dashboard sistem.</p>
             </div>
 
             @if (session('status'))

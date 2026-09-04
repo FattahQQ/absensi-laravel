@@ -10,11 +10,40 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name'     => 'Superadmin LSP',
-            'email'    => 'superadmin@lspkimia.com',
-            'password' => Hash::make('password123'),
-            'role'     => 'superadmin', // Kunci agar terdeteksi sebagai superadmin
-        ]);
+        $defaultUsers = [
+            [
+                'email' => 'superadmin@lspkimia.com',
+                'name' => 'Superadmin LSP',
+                'password' => 'password123',
+                'role' => 'superadmin',
+            ],
+            [
+                'email' => 'manager@lspkimia.com',
+                'name' => 'Manager LSP',
+                'password' => 'password123',
+                'role' => 'manager',
+            ],
+            [
+                'email' => 'karyawan@lspkimia.com',
+                'name' => 'Karyawan LSP',
+                'password' => 'password123',
+                'role' => 'karyawan',
+            ],
+        ];
+
+        foreach ($defaultUsers as $user) {
+            User::firstOrCreate(
+                ['email' => $user['email']],
+                [
+                    'name' => $user['name'],
+                    'password' => Hash::make($user['password']),
+                    'role' => $user['role'],
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            User::where('email', $user['email'])
+                ->update(['email_verified_at' => now(), 'role' => $user['role']]);
+        }
     }
 }

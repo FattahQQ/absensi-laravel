@@ -22,7 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'department', // Tambahkan kolom departemen di sini
+        'department',
+        'email_verified_at',
     ];
 
     /**

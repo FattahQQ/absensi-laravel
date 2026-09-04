@@ -108,7 +108,7 @@
         <div class="login-container">
             <div class="mb-4">
                 <h3 class="fw-bold text-dark mb-1">Registrasi Akun</h3>
-                <p class="text-muted small">Lengkapi data diri Anda untuk membuat kredensial baru.</p>
+                <p class="text-muted small">Lengkapi data Anda untuk membuat kredensial akses baru.</p>
             </div>
 
             <form method="POST" action="{{ route('register') }}">

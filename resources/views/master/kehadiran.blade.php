@@ -12,33 +12,91 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; color: #1e293b; }
-        .page-wrapper { max-width: 1320px; margin: 0 auto; }
-        .card-saas { border: none; border-radius: 16px; background: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05); }
-        .card-header-saas { background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px; font-weight: 700; color: #0f172a; font-size: 0.95rem; }
-        .table-saas th { background-color: #f8fafc; color: #64748b; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #f1f5f9; padding: 14px 16px; }
+        :root {
+            --bg-soft: #f4f7fb;
+            --panel: #ffffff;
+            --line: #e2e8f0;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --warning: #d97706;
+            --text: #0f172a;
+            --muted: #64748b;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f5f7fb 0%, #eef4ff 100%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+        .page-wrapper {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding-top: 38px;
+            padding-bottom: 48px;
+        }
+        .top-hero {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 64, 175, 0.97) 45%, rgba(37, 99, 235, 0.88) 100%);
+            border-radius: 26px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.18);
+            color: #fff;
+            padding: 24px 28px;
+            margin-bottom: 26px;
+        }
+        .crumbs { color: rgba(255,255,255,0.72); font-size: 0.8rem; }
+        .crumbs a { color: rgba(255,255,255,0.82); }
+        .page-title {
+            font-size: clamp(1.7rem, 2vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin: 10px 0 0;
+        }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+        .card-saas {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--panel);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+        }
+        .card-header-saas { background: transparent; border-bottom: 1px solid #f1f5f9; padding: 18px 22px; font-weight: 700; color: var(--text); font-size: 0.95rem; }
+        .table-saas th { background-color: #f8fafc; color: var(--muted); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #edf2f7; padding: 14px 16px; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .btn-primary-custom { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; border-radius: 10px; font-weight: 600; padding: 10px 18px; font-size: 0.875rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
-        .stat-card-blue { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 5px solid #2563eb; }
-        .stat-card-green { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-left: 5px solid #16a34a; }
-        .stat-card-amber { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 5px solid #d97706; }
+        .btn-primary-custom { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #fff; border: none; border-radius: 12px; font-weight: 700; padding: 10px 18px; font-size: 0.875rem; box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18); }
+        .btn-primary-custom:hover { color: #fff; transform: translateY(-1px); }
+        .stat-card-blue { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid rgba(59, 130, 246, 0.15); border-left: 5px solid #2563eb; }
+        .stat-card-green { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid rgba(22, 163, 74, 0.14); border-left: 5px solid #16a34a; }
+        .stat-card-amber { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 1px solid rgba(217, 119, 6, 0.15); border-left: 5px solid #d97706; }
     </style>
 </head>
 <body>
-    <div class="page-wrapper py-5 px-3">
+    <div class="page-wrapper px-3">
 
-        <!-- Top Header & Breadcrumb -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="top-hero d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-1">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-decoration-none text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item active text-primary fw-semibold" aria-current="page">Master Kehadiran</li>
+                <nav aria-label="breadcrumb" class="crumbs">
+                    <ol class="breadcrumb mb-2" style="background: transparent; margin: 0; padding: 0;">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">Master Kehadiran</li>
                     </ol>
                 </nav>
-                <h3 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history text-primary me-2"></i> Manajemen Master Kehadiran</h3>
+                <div class="header-badge"><i class="bi bi-clock-history"></i> Attendance Rules</div>
+                <h3 class="page-title"><i class="bi bi-calendar2-check me-2"></i> Manajemen Master Kehadiran</h3>
             </div>
-            <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-pill fw-semibold shadow-sm bg-white">
+            <a href="{{ route('dashboard') }}" class="btn btn-light px-3 py-2 fw-semibold shadow-sm border-0 rounded-pill">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Dashboard
             </a>
         </div>

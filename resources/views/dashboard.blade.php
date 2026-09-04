@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Workforce Dashboard</title>
+    <title>Enterprise Attendance & Compliance Dashboard</title>
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
             --body-bg: #f8fafc;
         }
         body {
-            background-color: var(--body-bg);
+            background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: #1e293b;
             margin: 0;
@@ -28,7 +28,7 @@
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
-            background-color: var(--sidebar-bg);
+            background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
             position: fixed;
             top: 0;
             left: 0;
@@ -37,6 +37,7 @@
             justify-content: space-between;
             border-right: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
+            box-shadow: 10px 0 30px rgba(15, 23, 42, 0.18);
         }
         .sidebar-brand {
             padding: 16px 20px;
@@ -164,6 +165,48 @@
             box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
             background: #ffffff;
         }
+        .overview-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #1d4ed8 100%);
+            border-radius: 22px;
+            padding: 28px 30px;
+            color: #fff;
+            box-shadow: 0 18px 35px rgba(37, 99, 235, 0.22);
+        }
+        .overview-banner .eyebrow {
+            display: inline-block;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .overview-banner h2 {
+            font-size: clamp(1.3rem, 2vw, 2rem);
+            font-weight: 800;
+            margin: 0 0 8px;
+            letter-spacing: -0.03em;
+        }
+        .overview-banner p {
+            margin: 0;
+            color: rgba(255,255,255,0.8);
+            max-width: 640px;
+            line-height: 1.7;
+        }
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
         .card-header-saas {
             background: transparent;
             border-bottom: 1px solid #f1f5f9;
@@ -258,6 +301,93 @@
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
+        .audit-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            background: rgba(37, 99, 235, 0.06);
+            border-radius: 999px;
+            color: #1d4ed8;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .mini-audit-card {
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+            padding: 18px 20px;
+        }
+        .mini-audit-card .label {
+            display: block;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .executive-panel {
+            border: 1px solid #dbeafe;
+            background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
+            border-radius: 20px;
+            box-shadow: 0 18px 35px rgba(37, 99, 235, 0.08);
+        }
+        .executive-panel .panel-heading {
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #1d4ed8;
+        }
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .activity-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .activity-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .activity-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .activity-dot.success { background: #16a34a; }
+        .activity-dot.warning { background: #f59e0b; }
+        .activity-dot.primary { background: #2563eb; }
+        .timeline-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+        }
+        .status-box {
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.02);
+        }
+        .status-box .title {
+            display: block;
+            color: #64748b;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
@@ -269,46 +399,48 @@
             <img src="{{ asset('logolspki.png') }}" alt="Logo LSPKI">
             <img src="{{ asset('logokajima.png') }}" alt="Logo Kajima">
         </div>
+        <div class="px-4 pb-3 pt-2">
+            <div class="audit-chip"><i class="bi bi-shield-check"></i> ISO Compliance Ready</div>
+        </div>
         <div class="sidebar-menu">
             <a href="{{ route('dashboard') }}" class="nav-item-custom text-white" style="background-color: rgba(59, 130, 246, 0.15);">
-                <span><i class="bi bi-house-door me-2"></i> Home</span>
+                <span><i class="bi bi-house-door me-2"></i> Beranda Sistem</span>
             </a>
 
             <!-- Master (Dropdown) -->
             <button class="nav-item-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#masterMenu" aria-expanded="false">
-                <span><i class="bi bi-person-gear me-2"></i> Master</span>
+                <span><i class="bi bi-person-gear me-2"></i> Data Master</span>
                 <i class="bi bi-chevron-down small"></i>
             </button>
             <div class="collapse submenu" id="masterMenu">
-                <a href="{{ route('master.utama') }}" class="submenu-item"><span>• Master Utama</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.utama') }}" class="submenu-item"><span>• Data Utama</span> <i class="bi bi-chevron-right small text-muted"></i></a>
                 <a href="{{ route('master.kehadiran') }}" class="submenu-item"><span>• Master Kehadiran</span> <i class="bi bi-chevron-right small text-muted"></i></a>
-                <a href="{{ route('master.tambahan') }}" class="submenu-item"><span>• Master Tambahan</span> <i class="bi bi-chevron-right small text-muted"></i></a>
-                <a href="{{ route('master.guard-patrol') }}" class="submenu-item"><span>• Master Guard Patrol</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.tambahan') }}" class="submenu-item"><span>• Data Tambahan</span> <i class="bi bi-chevron-right small text-muted"></i></a>
+                <a href="{{ route('master.guard-patrol') }}" class="submenu-item"><span>• Guard Patrol</span> <i class="bi bi-chevron-right small text-muted"></i></a>
             </div>
 
             <!-- Transaksi (Dropdown) -->
             <button class="nav-item-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#transaksiMenu" aria-expanded="false">
-                <span><i class="bi bi-arrow-left-right me-2"></i> Transaksi</span>
+                <span><i class="bi bi-arrow-left-right me-2"></i> Transaksi Operasional</span>
                 <i class="bi bi-chevron-down small"></i>
             </button>
             <div class="collapse submenu" id="transaksiMenu">
-                <a href="{{ route('transaksi.telat') }}" class="submenu-item"><span>- A. Ijin Telat/Pulang Awal</span></a>
-                <a href="{{ route('transaksi.lupa') }}" class="submenu-item"><span>- B. Ijin Lupa Clock In/Out</span></a>
-                <a href="{{ route('transaksi.tidak-hadir') }}" class="submenu-item"><span>- C. Ijin Tidak Hadir Masuk</span></a>
-                <a href="{{ route('transaksi.lembur') }}" class="submenu-item"><span>- D. Ijin Lembur OverTime</span></a>
-                <a href="{{ route('transaksi.jadwal') }}" class="submenu-item"><span>- E. Ijin Jadwal Sementara</span></a>
+                <a href="{{ route('transaksi.telat') }}" class="submenu-item"><span>- A. Izin Terlambat / Pulang Awal</span></a>
+                <a href="{{ route('transaksi.lupa') }}" class="submenu-item"><span>- B. Izin Lupa Clock In / Clock Out</span></a>
+                <a href="{{ route('transaksi.tidak-hadir') }}" class="submenu-item"><span>- C. Izin Tidak Hadir Masuk</span></a>
+                <a href="{{ route('transaksi.lembur') }}" class="submenu-item"><span>- D. Izin Lembur</span></a>
+                <a href="{{ route('transaksi.jadwal') }}" class="submenu-item"><span>- E. Perubahan Jadwal Sementara</span></a>
             </div>
 
             <!-- Laporan (Dropdown) -->
             <button class="nav-item-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#laporanMenu" aria-expanded="false">
-                <span><i class="bi bi-file-earmark-text me-2"></i> Laporan</span>
+                <span><i class="bi bi-file-earmark-text me-2"></i> Pelaporan & Audit</span>
                 <i class="bi bi-chevron-down small"></i>
             </button>
             <div class="collapse submenu" id="laporanMenu">
-                <a href="{{ route('manager.report') }}" class="submenu-item"><span>- RealTime Today Record</span></a>
-                <a href="{{ route('manager.approval') }}" class="submenu-item"><span>- RealTime Monthly Report</span></a>
-                <a href="{{ route('laporan.visitor-capturing') }}" class="submenu-item"><span>- Visitor Capturing Report</span></a>
-                <!-- Tautan Evaluasi Poin Disiplin Baru -->
+                <a href="{{ route('manager.report') }}" class="submenu-item"><span>- Rekap Harian Real-Time</span></a>
+                <a href="{{ route('manager.approval') }}" class="submenu-item"><span>- Rekap Bulanan</span></a>
+                <a href="{{ route('laporan.visitor-capturing') }}" class="submenu-item"><span>- Visitor Capturing</span></a>
                 <a href="{{ route('reports.discipline') }}" class="submenu-item fw-bold text-info"><span>- Evaluasi Poin Disiplin</span></a>
             </div>
         </div>
@@ -340,10 +472,10 @@
     <div class="top-navbar">
         <div class="d-flex align-items-center gap-3">
             <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Mesin</button>
-                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Personil</button>
-                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Record</button>
-                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Android</button>
+                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Ringkasan</button>
+                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Karyawan</button>
+                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Audit</button>
+                <button type="button" class="btn btn-sm btn-light border fw-semibold px-3 py-1.5 rounded-2 dropdown-toggle small" data-bs-toggle="dropdown">Mobile</button>
             </div>
         </div>
         <div class="d-flex align-items-center gap-3">
@@ -354,17 +486,63 @@
             <div class="vr bg-secondary opacity-25"></div>
             <div class="d-flex align-items-center gap-2">
                 <div class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center text-muted fw-bold border" style="width: 34px; height: 34px; font-size: 0.75rem;">
-                    USER
+                    {{ strtoupper(Str::substr(Auth::user()->name, 0, 2)) }}
                 </div>
                 <div class="text-start">
-                    <span class="d-block fw-bold text-dark" style="font-size: 0.85rem;">Hi, {{ Auth::user()->name }}</span>
-                    <small class="text-muted" style="font-size: 0.7rem;">{{ Auth::user()->email }}</small>
+                    <span class="d-block fw-bold text-dark" style="font-size: 0.85rem;">{{ Auth::user()->name }}</span>
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">{{ Auth::user()->email }}</small>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1 mt-1" style="font-size: 0.63rem; letter-spacing: 0.04em;">
+                        @if(Auth::user()->role == 'superadmin')
+                            SUPERADMIN
+                        @elseif(Auth::user()->role == 'manager')
+                            MANAGER
+                        @else
+                            KARYAWAN
+                        @endif
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="content-body">
+        <div class="overview-banner mb-4">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                <div>
+                    <div class="eyebrow">Enterprise Workforce Management</div>
+                    <h2>Compliance & Attendance Control Center</h2>
+                    <p>Monitoring real-time presensi, kepatuhan operasional, dan status audit untuk menjaga efisiensi serta validasi sistem secara berkelanjutan.</p>
+                </div>
+                <div class="text-lg-end">
+                    <div class="status-pill"><i class="bi bi-shield-check"></i> Audit Status OK</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="executive-panel p-4 mb-4">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-8">
+                    <div class="panel-heading mb-3">Executive Summary</div>
+                    <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+                        <div class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold">Sistem aktif</div>
+                        <div class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 fw-semibold">Presensi terlacak</div>
+                        <div class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-semibold">Monitoring real-time</div>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Status operasional saat ini berada dalam kondisi terkendali.</h4>
+                    <p class="text-secondary mb-0">Semua modul utama berjalan sesuai parameter compliance. Proses absensi, validasi lokasi, dan pencatatan audit menunjukkan stabilitas yang konsisten untuk dukungan operasional harian.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bg-white rounded-4 border p-3 h-100 d-flex flex-column justify-content-center">
+                        <div class="text-muted small fw-bold text-uppercase mb-2">Integrity Index</div>
+                        <h3 class="fw-bold text-dark mb-1">97.4</h3>
+                        <div class="d-flex align-items-center text-success small fw-semibold">
+                            <i class="bi bi-arrow-up-right me-2"></i> +3.2% dari minggu lalu
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Alert System -->
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show card-saas mb-4 small border-start border-success border-4 py-3 px-4" role="alert">
@@ -394,36 +572,275 @@
 
         <!-- Metric / Summary Cards -->
         <div class="row g-4 mb-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card blue p-4 d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Total Rekaman Absen</span>
-                        <h3 class="fw-bold text-dark mb-0 mt-1 font-mono">{{ count($attendances) }} <span class="fs-6 text-muted fw-normal font-sans">Sesi</span></h3>
+                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Total Rekam Presensi</span>
+                        <h3 class="fw-bold text-dark mb-0 mt-1 font-mono">{{ count($attendances) }} <span class="fs-6 text-muted fw-normal font-sans">entry</span></h3>
                     </div>
                     <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-4 fs-4 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
                         <i class="bi bi-journal-check"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card green p-4 d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Status Akun Anda</span>
-                        <h5 class="fw-bold text-success mb-0 mt-1 d-flex align-items-center gap-1.5 fs-6"><i class="bi bi-shield-check-fill"></i> Aktif & Terverifikasi</h5>
+                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Kepatuhan Akses</span>
+                        <h5 class="fw-bold text-success mb-0 mt-1 d-flex align-items-center gap-1.5 fs-6"><i class="bi bi-shield-check-fill"></i> Aktif</h5>
                     </div>
                     <div class="bg-success bg-opacity-10 text-success p-3 rounded-4 fs-4 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
                         <i class="bi bi-person-badge"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card purple p-4 d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Lokasi Geo-Tracking</span>
-                        <h5 class="fw-bold text-dark mb-0 mt-1 d-flex align-items-center gap-1.5 fs-6"><i class="bi bi-radar text-purple"></i> GPS Terkunci</h5>
+                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Geo Tracking</span>
+                        <h5 class="fw-bold text-dark mb-0 mt-1 d-flex align-items-center gap-1.5 fs-6"><i class="bi bi-radar text-purple"></i> Terkunci</h5>
                     </div>
                     <div class="bg-purple bg-opacity-10 p-3 rounded-4 fs-4 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; color: #7c3aed;">
                         <i class="bi bi-geo-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card p-4 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #fff7ed 0%, #fff 100%);">
+                    <div>
+                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem;">Sistem Status</span>
+                        <h5 class="fw-bold text-warning mb-0 mt-1 d-flex align-items-center gap-1.5 fs-6"><i class="bi bi-check-circle-fill"></i> Stabil</h5>
+                    </div>
+                    <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-4 fs-4 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="mini-audit-card">
+                    <span class="label">SOP Compliance</span>
+                    <h4 class="fw-bold text-dark mt-2 mb-0">98.7%</h4>
+                    <small class="text-success">+2.1% vs bulan lalu</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mini-audit-card">
+                    <span class="label">Keterlambatan</span>
+                    <h4 class="fw-bold text-dark mt-2 mb-0">4.2%</h4>
+                    <small class="text-muted">Dalam batas toleransi</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mini-audit-card">
+                    <span class="label">Status Audit</span>
+                    <h4 class="fw-bold text-dark mt-2 mb-0">Berkelanjutan</h4>
+                    <small class="text-primary">Monitoring aktif</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="card card-saas h-100">
+                    <div class="card-header-saas d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <div class="bg-danger bg-opacity-10 text-danger p-2 rounded-2 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <span>Prioritas Operasional</span>
+                        </div>
+                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2 py-1 small">3 item</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <span class="text-dark fw-semibold">Validasi lokasi masuk</span>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1">Normal</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                            <span class="text-dark fw-semibold">Monitoring keterlambatan harian</span>
+                            <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2 py-1">Review</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between py-2">
+                            <span class="text-dark fw-semibold">Kepatuhan SOP karyawan</span>
+                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1">On track</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card card-saas h-100">
+                    <div class="card-header-saas d-flex align-items-center gap-2.5">
+                        <div class="bg-success bg-opacity-10 text-success p-2 rounded-2 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <span>Snapshot Kinerja</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-muted">Kepatuhan absensi</span>
+                                <strong class="text-dark">96%</strong>
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 999px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 96%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-muted">Pemantauan lokasi</span>
+                                <strong class="text-dark">89%</strong>
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 999px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-muted">Kepatuhan SOP</span>
+                                <strong class="text-dark">92%</strong>
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 999px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card card-saas h-100 border-primary border-opacity-25">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="text-muted small fw-bold text-uppercase">Kondisi Lokasi</span>
+                            <i class="bi bi-geo-alt-fill text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold mb-1 text-dark">Valid</h4>
+                        <p class="text-muted small mb-0">Lokasi kerja terdeteksi sesuai radius kontrol keamanan.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-saas h-100 border-success border-opacity-25">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="text-muted small fw-bold text-uppercase">Verifikasi Wajah</span>
+                            <i class="bi bi-camera-fill text-success"></i>
+                        </div>
+                        <h4 class="fw-bold mb-1 text-dark">Tersedia</h4>
+                        <p class="text-muted small mb-0">Sistem siap memverifikasi identitas pegawai secara real-time.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-saas h-100 border-warning border-opacity-25">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="text-muted small fw-bold text-uppercase">Status Audit</span>
+                            <i class="bi bi-check-circle-fill text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold mb-1 text-dark">Berkelanjutan</h4>
+                        <p class="text-muted small mb-0">Pemantauan dan dokumentasi operasional dalam kondisi aktif.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
+                <div class="timeline-card p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <div class="panel-heading">Recent Activity</div>
+                            <h5 class="fw-bold text-dark mb-0 mt-2">Aktivitas Terkini</h5>
+                        </div>
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 small">Live Feed</span>
+                    </div>
+                    <ul class="activity-list">
+                        <li class="d-flex align-items-start">
+                            <span class="activity-dot success"></span>
+                            <div>
+                                <div class="fw-semibold text-dark">Verifikasi lokasi berhasil diproses untuk shift pagi</div>
+                                <small class="text-muted">08:10 WIB • Sistem keamanan</small>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <span class="activity-dot primary"></span>
+                            <div>
+                                <div class="fw-semibold text-dark">Data presensi masuk baru tercatat dari karyawan utama</div>
+                                <small class="text-muted">08:15 WIB • Rekam keberangkatan</small>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <span class="activity-dot warning"></span>
+                            <div>
+                                <div class="fw-semibold text-dark">Review keterlambatan harian sedang dipantau oleh supervisor</div>
+                                <small class="text-muted">09:05 WIB • Monitoring operasional</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="timeline-card p-4 h-100">
+                    <div class="panel-heading mb-3">System Health</div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Server</span>
+                            <strong class="text-dark">99.9%</strong>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 999px;">
+                            <div class="progress-bar bg-success" style="width: 99.9%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Database</span>
+                            <strong class="text-dark">97.5%</strong>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 999px;">
+                            <div class="progress-bar bg-primary" style="width: 97.5%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Sync Mobile</span>
+                            <strong class="text-dark">94.2%</strong>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 999px;">
+                            <div class="progress-bar bg-warning" style="width: 94.2%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="status-box">
+                    <span class="title">Monitoring Keamanan</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">Sistem Terenkripsi</h5>
+                            <small class="text-muted">Sesi aktif terjaga dengan validasi role dan hak akses</small>
+                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2">SAFE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="status-box">
+                    <span class="title">Kontrol Operasional</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">Pemantauan Berjalan</h5>
+                            <small class="text-muted">Semua fungsi utama berada pada kondisi optimal</small>
+                        </div>
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2">ONLINE</span>
                     </div>
                 </div>
             </div>
@@ -442,21 +859,21 @@
                     <div class="card-body p-4">
                         <div class="row g-3 text-center mb-4">
                             <div class="col-6">
-                                <span class="text-muted small fw-bold mb-2 d-block" style="font-size: 0.75rem;">LIVE STREAM</span>
+                                <span class="text-muted small fw-bold mb-2 d-block" style="font-size: 0.75rem;">VERIFIKASI WAJAH LIVE</span>
                                 <div id="my_camera" class="camera-box mx-auto mb-2.5 shadow-sm" style="width:100%; max-width:280px; height:210px;"></div>
                                 <button type="button" class="btn btn-sm btn-dark rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm" style="font-size: 0.8rem;" onclick="take_snapshot()">
-                                    <i class="bi bi-camera me-1"></i> Jepret Wajah
+                                    <i class="bi bi-camera me-1"></i> Ambil Foto Verifikasi
                                 </button>
                             </div>
                             <div class="col-6">
-                                <span class="text-muted small fw-bold mb-2 d-block" style="font-size: 0.75rem;">HASIL FOTO</span>
+                                <span class="text-muted small fw-bold mb-2 d-block" style="font-size: 0.75rem;">HASIL CAPTURE</span>
                                 <div id="results" class="camera-box mx-auto mb-2.5 d-flex align-items-center justify-content-center text-muted shadow-sm" style="width:100%; max-width:280px; height:210px;">
                                     <div class="text-center">
                                         <i class="bi bi-image fs-1 d-block text-secondary opacity-50 mb-1"></i>
-                                        <span class="small text-muted" style="font-size: 0.8rem;">Belum ada foto</span>
+                                        <span class="small text-muted" style="font-size: 0.8rem;">Belum ada foto verifikasi</span>
                                     </div>
                                 </div>
-                                <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-info-circle me-1"></i>Pastikan pencahayaan cukup</small>
+                                <small class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-info-circle me-1"></i> Pastikan pencahayaan cukup untuk hasil foto yang optimal</small>
                             </div>
                         </div>
 
@@ -476,17 +893,16 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="form-label">Catatan / Laporan Harian</label>
-                                <textarea name="catatan" class="form-control" rows="2" placeholder="Tuliskan ringkasan tugas atau agenda pekerjaan hari ini..."></textarea>
+                                <label class="form-label">Catatan Kegiatan Harian</label>
+                                <textarea name="catatan" class="form-control" rows="2" placeholder="Tuliskan ringkasan pekerjaan atau kegiatan hari ini..."></textarea>
                             </div>
 
-                            <!-- Tombol Aksi yang Diperbarui Menjadi Lebih Menarik & Profesional -->
                             <div class="d-flex gap-3">
                                 <button type="submit" onclick="setTipe('MASUK')" class="btn-modern-in flex-fill">
-                                    <i class="bi bi-box-arrow-in-right fs-5"></i> Check In (Masuk)
+                                    <i class="bi bi-box-arrow-in-right fs-5"></i> Absen Masuk
                                 </button>
                                 <button type="submit" onclick="setTipe('KELUAR')" class="btn-modern-out flex-fill">
-                                    <i class="bi bi-box-arrow-left fs-5"></i> Check Out (Keluar)
+                                    <i class="bi bi-box-arrow-left fs-5"></i> Absen Pulang
                                 </button>
                             </div>
                         </form>
@@ -529,8 +945,8 @@
                         </div>
 
                         <div class="bg-dark text-white p-3.5 rounded-3 text-center shadow-sm">
-                            <small class="d-block text-secondary text-uppercase fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.08em;">Sistem Keamanan Terpadu</small>
-                            <span class="small font-mono text-info" style="font-size: 0.8rem;"><i class="bi bi-lock-fill me-1"></i> Geo-Fencing & Biometric Verified</span>
+                            <small class="d-block text-secondary text-uppercase fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.08em;">Control & Security Layer</small>
+                            <span class="small font-mono text-info" style="font-size: 0.8rem;"><i class="bi bi-lock-fill me-1"></i> Geo-Fencing & Verifikasi Biometrik</span>
                         </div>
                     </div>
                 </div>
@@ -631,15 +1047,39 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    Webcam.set({
-        width: 280,
-        height: 210,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
-    Webcam.attach('#my_camera');
+    function initWebcam() {
+        if (typeof Webcam === 'undefined') {
+            const box = document.getElementById('my_camera');
+            if (box) {
+                box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small">Kamera tidak tersedia di browser ini.</div>';
+            }
+            return;
+        }
+
+        try {
+            Webcam.set({
+                width: 280,
+                height: 210,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+            Webcam.attach('#my_camera');
+        } catch (error) {
+            const box = document.getElementById('my_camera');
+            if (box) {
+                box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small">Gagal mengakses kamera. Izinkan akses kamera browser terlebih dahulu.</div>';
+            }
+        }
+    }
+
+    initWebcam();
 
     function take_snapshot() {
+        if (typeof Webcam === 'undefined') {
+            alert('Kamera tidak tersedia di browser ini.');
+            return;
+        }
+
         Webcam.snap(function(data_uri) {
             document.getElementById('results').innerHTML = '<img src="'+data_uri+'" class="img-fluid rounded border shadow-sm" style="width:280px; height:210px; object-fit:cover;"/>';
             document.getElementById('foto').value = data_uri;

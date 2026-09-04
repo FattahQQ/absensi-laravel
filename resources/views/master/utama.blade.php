@@ -114,6 +114,11 @@
                         </a>
                     @endif
 
+                    <!-- Tombol Export Excel -->
+                    <a href="{{ route('master.utama.export') }}" class="btn btn-outline-success fw-semibold rounded-3 px-3 py-2" style="font-size: 0.875rem;" title="Export Excel">
+                        <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
+                    </a>
+
                     <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="bi bi-person-plus me-1"></i> Tambah Data Utama
                     </button>

@@ -11,14 +11,22 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MasterUtamaController extends Controller
 {
-    // Menampilkan data pegawai dengan kondisi awal kosong jika belum ada filter / pencarian
+    // Menampilkan data pegawai dengan filter role, departemen, dan kata kunci pencarian
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $filter = $request->input('filter');
+        $search     = $request->input('search');
+        $filter     = $request->input('filter');
+        $department = $request->input('department');
 
-        // Jika tidak ada pencarian dan filter belum dipilih, biarkan collection kosong
-        if (!$search && !$filter) {
+        // Mengambil daftar departemen unik yang ada di database untuk dropdown filter
+        $departments = User::whereNotNull('department')
+                           ->where('department', '!=', '')
+                           ->select('department')
+                           ->distinct()
+                           ->pluck('department');
+
+        // Jika tidak ada pencarian dan semua filter belum dipilih, biarkan collection kosong
+        if (!$search && !$filter && !$department) {
             $users = collect();
         } else {
             $query = User::query();
@@ -36,14 +44,19 @@ class MasterUtamaController extends Controller
                 $query->where('role', $filter);
             }
 
-            // Gunakan paginate(10) dan appends agar query string search & filter tetap terbawa saat ganti halaman
+            // Saring berdasarkan filter departemen dinamis (jika bukan 'semua')
+            if ($department && $department !== 'semua') {
+                $query->where('department', $department);
+            }
+
+            // Gunakan paginate(10) dan appends agar query string tetap terbawa saat navigasi halaman
             $users = $query->latest()->paginate(10)->appends($request->all());
         }
 
         $totalPegawai = User::count();
-        $totalDivisi = 6;
+        $totalDivisi  = $departments->count() ?: 6;
 
-        return view('master.utama', compact('users', 'totalPegawai', 'totalDivisi', 'search', 'filter'));
+        return view('master.utama', compact('users', 'totalPegawai', 'totalDivisi', 'search', 'filter', 'department', 'departments'));
     }
 
     // Export data pegawai ke file Excel (.xlsx)
@@ -68,17 +81,19 @@ class MasterUtamaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'role'     => 'required|string',
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|string|email|max:255|unique:users',
+            'password'   => 'required|string|min:6',
+            'role'       => 'required|string',
+            'department' => 'nullable|string|max:255',
         ]);
 
         User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
+            'name'       => $request->name,
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password),
+            'role'       => $request->role,
+            'department' => $request->department ?? 'Information Technology',
         ]);
 
         return redirect()->back()->with('success', 'Data pegawai berhasil ditambahkan!');
@@ -90,15 +105,17 @@ class MasterUtamaController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'role'  => 'required|string',
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|string|email|max:255|unique:users,email,' . $id,
+            'role'       => 'required|string',
+            'department' => 'nullable|string|max:255',
         ]);
 
         $data = [
-            'name'  => $request->name,
-            'email' => $request->email,
-            'role'  => $request->role,
+            'name'       => $request->name,
+            'email'      => $request->email,
+            'role'       => $request->role,
+            'department' => $request->department,
         ];
 
         if ($request->filled('password')) {

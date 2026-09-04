@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\DisciplineReportController;
 use App\Http\Controllers\MasterUtamaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,9 @@ Route::middleware(['auth', 'verified', 'role:manager,superadmin'])->group(functi
     Route::get('/laporan/monthly-report', function () {
         return view('laporan.monthly-report');
     })->name('laporan.monthly');
+
+    // Rute Laporan Evaluasi Poin Disiplin Bulanan (Sesuai Regulasi PDF & Spreadsheet)
+    Route::get('/laporan/evaluasi-poin', [DisciplineReportController::class, 'index'])->name('reports.discipline');
 });
 
 // Rute Khusus Superadmin (Kelola Data Master Karyawan, Menu Master, Transaksi & Laporan)
@@ -48,6 +52,7 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     // Rute Lengkap Menu Master (Master Utama dihubungkan ke MasterUtamaController)
     Route::get('/master/utama', [MasterUtamaController::class, 'index'])->name('master.utama');
     Route::get('/master/utama/export', [MasterUtamaController::class, 'export'])->name('master.utama.export');
+    Route::post('/master/utama/import', [MasterUtamaController::class, 'import'])->name('master.utama.import');
     Route::post('/master/utama', [MasterUtamaController::class, 'store'])->name('master.utama.store');
     Route::put('/master/utama/{id}', [MasterUtamaController::class, 'update'])->name('master.utama.update');
     Route::delete('/master/utama/{id}', [MasterUtamaController::class, 'destroy'])->name('master.utama.destroy');

@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // pastikan field role juga ikut ter-fill jika ada
+        'role',
+        'department', // Tambahkan kolom departemen di sini
     ];
 
     /**

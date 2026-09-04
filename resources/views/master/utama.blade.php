@@ -92,11 +92,20 @@
                 
                 <form action="{{ route('master.utama') }}" method="GET" class="d-flex align-items-center gap-2 flex-wrap">
                     <select name="filter" class="form-select border-1 rounded-3 text-muted fw-medium" style="font-size: 0.875rem; width: auto;" onchange="this.form.submit()">
-                        <option value="" {{ empty($filter) ? 'selected' : '' }}>-- Pilih Filter Data --</option>
-                        <option value="semua" {{ ($filter ?? '') == 'semua' ? 'selected' : '' }}>Tampilkan Semua Data</option>
+                        <option value="" {{ empty($filter) ? 'selected' : '' }}>-- Filter Role --</option>
+                        <option value="semua" {{ ($filter ?? '') == 'semua' ? 'selected' : '' }}>Semua Role</option>
                         <option value="superadmin" {{ ($filter ?? '') == 'superadmin' ? 'selected' : '' }}>Filter: Superadmin</option>
                         <option value="manager" {{ ($filter ?? '') == 'manager' ? 'selected' : '' }}>Filter: Manager</option>
                         <option value="pegawai" {{ ($filter ?? '') == 'pegawai' ? 'selected' : '' }}>Filter: Karyawan / Staff</option>
+                    </select>
+
+                    <!-- Filter Departemen Dinamis -->
+                    <select name="department" class="form-select border-1 rounded-3 text-muted fw-medium" style="font-size: 0.875rem; width: auto;" onchange="this.form.submit()">
+                        <option value="" {{ empty($department) ? 'selected' : '' }}>-- Filter Departemen --</option>
+                        <option value="semua" {{ ($department ?? '') == 'semua' ? 'selected' : '' }}>Semua Departemen</option>
+                        @foreach($departments as $dept)
+                            <option value="{{ $dept }}" {{ ($department ?? '') == $dept ? 'selected' : '' }}>{{ $dept }}</option>
+                        @endforeach
                     </select>
 
                     <div class="search-box">
@@ -108,7 +117,7 @@
                         <i class="bi bi-funnel me-1"></i> Terapkan
                     </button>
 
-                    @if(!empty($filter) || !empty($search))
+                    @if(!empty($filter) || !empty($search) || !empty($department))
                         <a href="{{ route('master.utama') }}" class="btn btn-outline-danger fw-semibold rounded-3 px-3 py-2" style="font-size: 0.875rem;" title="Reset Filter">
                             <i class="bi bi-x-circle me-1"></i> Reset
                         </a>
@@ -151,7 +160,11 @@
                                     </td>
                                     <td class="text-start fw-semibold text-dark">{{ $user->name }}</td>
                                     <td class="font-mono text-primary">{{ $user->email }}</td>
-                                    <td>Information Technology</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border px-2.5 py-1 rounded-2 fw-medium">
+                                            {{ $user->department ?? 'Information Technology' }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <span class="badge bg-opacity-10 border px-3 py-1 rounded-pill 
                                             {{ strtolower($user->role ?? '') == 'superadmin' ? 'bg-success text-success border-success' : 'bg-primary text-primary border-primary' }}">
@@ -164,6 +177,7 @@
                                                 data-name="{{ $user->name }}"
                                                 data-email="{{ $user->email }}"
                                                 data-role="{{ $user->role }}"
+                                                data-department="{{ $user->department }}"
                                                 title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
@@ -180,7 +194,7 @@
                                         <div class="d-flex flex-column align-items-center justify-content-center">
                                             <i class="bi bi-funnel text-secondary opacity-50 fs-1 mb-2"></i>
                                             <span class="fw-semibold">Data Belum Dimuat / Tidak Ditemukan</span>
-                                            <small class="text-muted mt-1">Pilih filter "Tampilkan Semua Data" atau gunakan kolom pencarian untuk menampilkan data pegawai.</small>
+                                            <small class="text-muted mt-1">Pilih filter "Semua Role" / "Semua Departemen" atau gunakan kolom pencarian untuk menampilkan data pegawai.</small>
                                         </div>
                                     </td>
                                 </tr>
@@ -224,6 +238,10 @@
                             <input type="email" id="edit_email" name="email" class="form-control font-mono" required>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Departemen / Divisi</label>
+                            <input type="text" id="edit_department" name="department" class="form-control" placeholder="Contoh: Information Technology">
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Password Baru (Opsional)</label>
                             <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin diubah">
                         </div>
@@ -265,6 +283,10 @@
                             <input type="email" name="email" class="form-control font-mono" placeholder="nama@perusahaan.com" required>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Departemen / Divisi</label>
+                            <input type="text" name="department" class="form-control" placeholder="Contoh: Information Technology">
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Password Login</label>
                             <input type="password" name="password" class="form-control" placeholder="Masukkan password awal" required>
                         </div>
@@ -303,7 +325,7 @@
                             <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" required>
                             <div class="form-text mt-2" style="font-size: 0.775rem;">
                                 * Format file harus <strong>.xlsx / .csv</strong>. <br>
-                                * Pastikan baris pertama berisi header: <code>nama_pegawai</code>, <code>email</code>, <code>role</code>, <code>password</code>.
+                                * Pastikan baris pertama berisi header: <code>nama_pegawai</code>, <code>email</code>, <code>role</code>, <code>department</code>, <code>password</code>.
                             </div>
                         </div>
                     </div>
@@ -329,12 +351,14 @@
                     const name = this.getAttribute('data-name');
                     const email = this.getAttribute('data-email');
                     const role = this.getAttribute('data-role');
+                    const department = this.getAttribute('data-department');
 
                     editForm.action = `/master/utama/${id}`;
 
                     document.getElementById('edit_name').value = name;
                     document.getElementById('edit_email').value = email;
                     document.getElementById('edit_role').value = role;
+                    document.getElementById('edit_department').value = department || 'Information Technology';
 
                     globalModal.show();
                 });

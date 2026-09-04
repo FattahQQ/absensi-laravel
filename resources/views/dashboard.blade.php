@@ -10,7 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+    <!-- Memanggil Webcam.js dari penyimpanan lokal public/webcam.min.js -->
+    <script src="{{ asset('webcam.min.js') }}"></script>
     <style>
         :root {
             --sidebar-width: 280px;
@@ -861,9 +862,14 @@
                             <div class="col-6">
                                 <span class="text-muted small fw-bold mb-2 d-block" style="font-size: 0.75rem;">VERIFIKASI WAJAH LIVE</span>
                                 <div id="my_camera" class="camera-box mx-auto mb-2.5 shadow-sm" style="width:100%; max-width:280px; height:210px;"></div>
-                                <button type="button" class="btn btn-sm btn-dark rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm" style="font-size: 0.8rem;" onclick="take_snapshot()">
-                                    <i class="bi bi-camera me-1"></i> Ambil Foto Verifikasi
-                                </button>
+                                <div class="d-flex flex-column gap-2 mt-2">
+                                    <button type="button" class="btn btn-sm btn-dark rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm" style="font-size: 0.8rem;" onclick="requestDeviceAccess()">
+                                        <i class="bi bi-shield-check me-1"></i> Aktifkan Kamera & GPS
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm" style="font-size: 0.8rem;" onclick="take_snapshot()">
+                                        <i class="bi bi-camera me-1"></i> Ambil Foto Verifikasi
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-6">
                                 <span class="text-muted small fw-bold mb-2 d-block" style="font-size: 0.75rem;">HASIL CAPTURE</span>
@@ -1048,56 +1054,117 @@
     updateClock();
 
     function initWebcam() {
-        if (typeof Webcam === 'undefined') {
-            const box = document.getElementById('my_camera');
-            if (box) {
-                box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small">Kamera tidak tersedia di browser ini.</div>';
-            }
+        const box = document.getElementById('my_camera');
+        if (!box) return;
+
+        box.innerHTML = '';
+
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+            box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small px-2 text-center">Halaman harus memakai HTTPS/localhost agar kamera dan GPS bisa aktif.</div>';
             return;
         }
 
-        try {
-            Webcam.set({
-                width: 280,
-                height: 210,
-                image_format: 'jpeg',
-                jpeg_quality: 90
-            });
-            Webcam.attach('#my_camera');
-        } catch (error) {
-            const box = document.getElementById('my_camera');
-            if (box) {
-                box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small">Gagal mengakses kamera. Izinkan akses kamera browser terlebih dahulu.</div>';
-            }
+        const video = document.createElement('video');
+        video.id = 'liveVideo';
+        video.autoplay = true;
+        video.playsInline = true;
+        video.muted = true;
+        video.style.width = '100%';
+        video.style.height = '100%';
+        video.style.objectFit = 'cover';
+        video.style.borderRadius = '12px';
+        box.appendChild(video);
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small px-2 text-center">Browser ini tidak mendukung kamera web.</div>';
+            return;
         }
     }
 
-    initWebcam();
-
-    function take_snapshot() {
-        if (typeof Webcam === 'undefined') {
-            alert('Kamera tidak tersedia di browser ini.');
-            return;
+    function requestCameraAccess() {
+        const box = document.getElementById('my_camera');
+        const video = document.getElementById('liveVideo');
+        if (!box || !video) {
+            initWebcam();
         }
 
-        Webcam.snap(function(data_uri) {
-            document.getElementById('results').innerHTML = '<img src="'+data_uri+'" class="img-fluid rounded border shadow-sm" style="width:280px; height:210px; object-fit:cover;"/>';
-            document.getElementById('foto').value = data_uri;
+        const liveVideo = document.getElementById('liveVideo');
+        if (!liveVideo) return;
+
+        if (window.cameraStream) {
+            window.cameraStream.getTracks().forEach(track => track.stop());
+        }
+
+        navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: 'user',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
+        }).then(function(stream) {
+            window.cameraStream = stream;
+            liveVideo.srcObject = stream;
+            liveVideo.play().catch(function() {});
+            box.innerHTML = '';
+            box.appendChild(liveVideo);
+        }).catch(function(error) {
+            box.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small px-2 text-center">Kamera diblokir atau tidak tersedia. Izinkan akses kamera di browser lalu klik tombol lagi.</div>';
         });
     }
 
-    function setTipe(tipe) {
-        document.getElementById('tipe_absensi').value = tipe;
-    }
+    function requestLocationAccess() {
+        if (!navigator.geolocation) {
+            document.getElementById('location_display').value = 'Browser tidak mendukung GPS.';
+            return;
+        }
 
-    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             document.getElementById('latitude').value = position.coords.latitude;
             document.getElementById('longitude').value = position.coords.longitude;
             document.getElementById('location_display').value = position.coords.latitude + ', ' + position.coords.longitude;
+        }, function(error) {
+            document.getElementById('location_display').value = 'Gagal mendeteksi GPS. Buka pengaturan browser > situs > izinkan lokasi.';
+        }, {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
         });
-    } else {
-        alert("Browser Anda tidak mendukung Geolocation GPS.");
+    }
+
+    function requestDeviceAccess() {
+        requestCameraAccess();
+        requestLocationAccess();
+    }
+
+    window.addEventListener('load', function() {
+        initWebcam();
+        document.getElementById('location_display').value = 'Klik “Aktifkan Kamera & GPS” untuk mulai izin browser.';
+    });
+
+    function take_snapshot() {
+        const video = document.getElementById('liveVideo');
+        if (!video || !video.srcObject) {
+            alert('Kamera belum aktif. Klik tombol “Aktifkan Kamera & GPS” lalu izinkan akses browser.');
+            return;
+        }
+
+        const canvas = document.createElement('canvas');
+        const width = video.videoWidth || 640;
+        const height = video.videoHeight || 480;
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, width, height);
+        const dataUri = canvas.toDataURL('image/jpeg', 0.9);
+
+        document.getElementById('results').innerHTML = '<img src="'+dataUri+'" class="img-fluid rounded border shadow-sm" style="width:280px; height:210px; object-fit:cover;"/>';
+        document.getElementById('foto').value = dataUri;
+    }
+
+    function setTipe(tipe) {
+        document.getElementById('tipe_absensi').value = tipe;
     }
 </script>
 </body>

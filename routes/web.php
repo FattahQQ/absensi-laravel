@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdditionalAttributeController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DisciplineReportController;
+use App\Http\Controllers\GuardPatrolController;
 use App\Http\Controllers\MasterUtamaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -68,9 +69,11 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::put('/master/tambahan/{id}', [AdditionalAttributeController::class, 'update'])->name('master.tambahan.update');
     Route::delete('/master/tambahan/{id}', [AdditionalAttributeController::class, 'destroy'])->name('master.tambahan.destroy');
 
-    Route::get('/master/guard-patrol', function () {
-        return view('master.guard-patrol');
-    })->name('master.guard-patrol');
+    // Rute Master Guard Patrol (Terhubung ke GuardPatrolController)
+    Route::get('/master/guard-patrol', [GuardPatrolController::class, 'index'])->name('master.guard-patrol');
+    Route::post('/master/guard-patrol', [GuardPatrolController::class, 'store'])->name('master.guard-patrol.store');
+    Route::put('/master/guard-patrol/{id}', [GuardPatrolController::class, 'update'])->name('master.guard-patrol.update');
+    Route::delete('/master/guard-patrol/{id}', [GuardPatrolController::class, 'destroy'])->name('master.guard-patrol.destroy');
 
     // Rute Lengkap Menu Transaksi
     Route::get('/transaksi/telat-pulang-awal', function () {

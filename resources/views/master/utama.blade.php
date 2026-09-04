@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; color: #1e293b; }
         .page-wrapper { max-width: 1320px; margin: 0 auto; }
@@ -25,12 +29,6 @@
 </head>
 <body>
     <div class="page-wrapper py-5 px-3">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
@@ -181,10 +179,10 @@
                                                 title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
-                                        <form action="{{ route('master.utama.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pegawai ini?')">
+                                        <form action="{{ route('master.utama.destroy', $user->id) }}" method="POST" class="d-inline form-delete">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light border text-danger px-2.5 py-1 rounded-2" title="Hapus"><i class="bi bi-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-light border text-danger px-2.5 py-1 rounded-2 btn-delete" title="Hapus"><i class="bi bi-trash"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -341,6 +339,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Logika Modal Edit
             const editModalElement = document.getElementById('globalEditModal');
             const globalModal = new bootstrap.Modal(editModalElement);
             const editForm = document.getElementById('globalEditForm');
@@ -361,6 +360,47 @@
                     document.getElementById('edit_department').value = department || 'Information Technology';
 
                     globalModal.show();
+                });
+            });
+
+            // Notifikasi Toast Sukses dari Session Laravel
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'rounded-4'
+                    }
+                });
+            @endif
+
+            // Konfirmasi Hapus Data dengan SweetAlert2 Modal
+            document.querySelectorAll('.form-delete').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data pegawai ini akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc2626',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: '<i class="bi bi-trash me-1"></i> Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        customClass: {
+                            popup: 'rounded-4',
+                            confirmButton: 'rounded-3 px-3 py-2',
+                            cancelButton: 'rounded-3 px-3 py-2'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.submit();
+                        }
+                    });
                 });
             });
         });

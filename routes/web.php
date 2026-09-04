@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\MasterUtamaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,16 +30,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:manager,superadmin'])->group(function () {
     Route::get('/manager/approval', [AttendanceController::class, 'approval'])->name('manager.approval');
     Route::get('/manager/report', [AttendanceController::class, 'report'])->name('manager.report');
+    
+    // Rute Laporan RealTime Hari Ini & Bulanan
+    Route::get('/laporan/today-record', function () {
+        return view('laporan.today-record');
+    })->name('laporan.today');
+
+    Route::get('/laporan/monthly-report', function () {
+        return view('laporan.monthly-report');
+    })->name('laporan.monthly');
 });
 
 // Rute Khusus Superadmin (Kelola Data Master Karyawan, Menu Master, Transaksi & Laporan)
 Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::get('/superadmin/users', [AttendanceController::class, 'manageUsers'])->name('superadmin.users');
     
-    // Rute Lengkap Menu Master
-    Route::get('/master/utama', function () {
-        return view('master.utama');
-    })->name('master.utama');
+    // Rute Lengkap Menu Master (Master Utama dihubungkan ke MasterUtamaController)
+    Route::get('/master/utama', [MasterUtamaController::class, 'index'])->name('master.utama');
+    Route::post('/master/utama', [MasterUtamaController::class, 'store'])->name('master.utama.store');
+    Route::put('/master/utama/{id}', [MasterUtamaController::class, 'update'])->name('master.utama.update');
+    Route::delete('/master/utama/{id}', [MasterUtamaController::class, 'destroy'])->name('master.utama.destroy');
 
     Route::get('/master/kehadiran', function () {
         return view('master.kehadiran');

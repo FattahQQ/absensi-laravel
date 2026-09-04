@@ -155,6 +155,7 @@ class AttendanceController extends Controller
             $query->whereBetween('tanggal', [$startDate, $endDate]);
         }])->get();
 
-        return view('manager.report', compact('users', 'startDate', 'endDate'));
+        // Diperbaiki menjadi manajer.report sesuai struktur folder view kamu
+        return view('manajer.report', compact('users', 'startDate', 'endDate'));
     }
 }

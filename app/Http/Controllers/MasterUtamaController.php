@@ -33,7 +33,8 @@ class MasterUtamaController extends Controller
                 $query->where('role', $filter);
             }
 
-            $users = $query->latest()->get();
+            // Gunakan paginate(10) dan appends agar query string search & filter tetap terbawa saat ganti halaman
+            $users = $query->latest()->paginate(10)->appends($request->all());
         }
 
         $totalPegawai = User::count();

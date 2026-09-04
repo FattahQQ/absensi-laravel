@@ -108,6 +108,12 @@
                         <i class="bi bi-funnel me-1"></i> Terapkan
                     </button>
 
+                    @if(!empty($filter) || !empty($search))
+                        <a href="{{ route('master.utama') }}" class="btn btn-outline-danger fw-semibold rounded-3 px-3 py-2" style="font-size: 0.875rem;" title="Reset Filter">
+                            <i class="bi bi-x-circle me-1"></i> Reset
+                        </a>
+                    @endif
+
                     <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="bi bi-person-plus me-1"></i> Tambah Data Utama
                     </button>
@@ -130,7 +136,9 @@
                         <tbody>
                             @forelse($users as $index => $user)
                                 <tr>
-                                    <td class="fw-bold text-muted font-mono">{{ $index + 1 }}</td>
+                                    <td class="fw-bold text-muted font-mono">
+                                        {{ method_exists($users, 'firstItem') ? $users->firstItem() + $index : $index + 1 }}
+                                    </td>
                                     <td class="text-start fw-semibold text-dark">{{ $user->name }}</td>
                                     <td class="font-mono text-primary">{{ $user->email }}</td>
                                     <td>Information Technology</td>
@@ -171,6 +179,17 @@
                     </table>
                 </div>
             </div>
+
+            @if(method_exists($users, 'hasPages') && $users->hasPages())
+                <div class="card-footer bg-white border-top py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="small text-muted">
+                        Menampilkan <span class="fw-bold text-dark">{{ $users->firstItem() }}</span> sampai <span class="fw-bold text-dark">{{ $users->lastItem() }}</span> dari <span class="fw-bold text-dark">{{ $users->total() }}</span> pegawai
+                    </div>
+                    <div>
+                        {{ $users->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 

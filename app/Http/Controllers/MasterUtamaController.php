@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Exports\UsersExport;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MasterUtamaController extends Controller
 {
@@ -41,6 +44,24 @@ class MasterUtamaController extends Controller
         $totalDivisi = 6;
 
         return view('master.utama', compact('users', 'totalPegawai', 'totalDivisi', 'search', 'filter'));
+    }
+
+    // Export data pegawai ke file Excel (.xlsx)
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'data_pegawai_' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    // Import data pegawai dari file Excel (.xlsx / .csv)
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        Excel::import(new UsersImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data pegawai berhasil di-import dari Excel!');
     }
 
     // Tambah pegawai baru

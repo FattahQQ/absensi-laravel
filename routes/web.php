@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdditionalAttributeController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DisciplineReportController;
 use App\Http\Controllers\MasterUtamaController;
@@ -61,9 +62,11 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
         return view('master.kehadiran');
     })->name('master.kehadiran');
 
-    Route::get('/master/tambahan', function () {
-        return view('master.tambahan');
-    })->name('master.tambahan');
+    // Rute Master Atribut Tambahan (Terhubung ke AdditionalAttributeController)
+    Route::get('/master/tambahan', [AdditionalAttributeController::class, 'index'])->name('master.tambahan');
+    Route::post('/master/tambahan', [AdditionalAttributeController::class, 'store'])->name('master.tambahan.store');
+    Route::put('/master/tambahan/{id}', [AdditionalAttributeController::class, 'update'])->name('master.tambahan.update');
+    Route::delete('/master/tambahan/{id}', [AdditionalAttributeController::class, 'destroy'])->name('master.tambahan.destroy');
 
     Route::get('/master/guard-patrol', function () {
         return view('master.guard-patrol');

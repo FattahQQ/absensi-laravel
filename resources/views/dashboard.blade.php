@@ -308,6 +308,8 @@
                 <a href="{{ route('manager.report') }}" class="submenu-item"><span>- RealTime Today Record</span></a>
                 <a href="{{ route('manager.approval') }}" class="submenu-item"><span>- RealTime Monthly Report</span></a>
                 <a href="{{ route('laporan.visitor-capturing') }}" class="submenu-item"><span>- Visitor Capturing Report</span></a>
+                <!-- Tautan Evaluasi Poin Disiplin Baru -->
+                <a href="{{ route('reports.discipline') }}" class="submenu-item fw-bold text-info"><span>- Evaluasi Poin Disiplin</span></a>
             </div>
         </div>
     </div>

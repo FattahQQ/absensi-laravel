@@ -47,6 +47,7 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     
     // Rute Lengkap Menu Master (Master Utama dihubungkan ke MasterUtamaController)
     Route::get('/master/utama', [MasterUtamaController::class, 'index'])->name('master.utama');
+    Route::get('/master/utama/export', [MasterUtamaController::class, 'export'])->name('master.utama.export');
     Route::post('/master/utama', [MasterUtamaController::class, 'store'])->name('master.utama.store');
     Route::put('/master/utama/{id}', [MasterUtamaController::class, 'update'])->name('master.utama.update');
     Route::delete('/master/utama/{id}', [MasterUtamaController::class, 'destroy'])->name('master.utama.destroy');

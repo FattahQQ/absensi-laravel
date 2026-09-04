@@ -119,6 +119,11 @@
                         <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
                     </a>
 
+                    <!-- Tombol Import Excel -->
+                    <button type="button" class="btn btn-outline-primary fw-semibold rounded-3 px-3 py-2" style="font-size: 0.875rem;" data-bs-toggle="modal" data-bs-target="#importExcelModal" title="Import Excel">
+                        <i class="bi bi-file-earmark-arrow-up me-1"></i> Import Excel
+                    </button>
+
                     <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="bi bi-person-plus me-1"></i> Tambah Data Utama
                     </button>
@@ -276,6 +281,35 @@
                     <div class="modal-footer border-top px-4 py-3">
                         <button type="button" class="btn btn-light border px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary-custom px-4">Simpan Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import Excel -->
+    <div class="modal fade" id="importExcelModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg text-start">
+                <div class="modal-header border-bottom px-4 py-3">
+                    <h5 class="fw-bold text-dark mb-0 fs-6"><i class="bi bi-file-earmark-excel text-success me-2"></i> Import Data Pegawai Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('master.utama.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Pilih File Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" required>
+                            <div class="form-text mt-2" style="font-size: 0.775rem;">
+                                * Format file harus <strong>.xlsx / .csv</strong>. <br>
+                                * Pastikan baris pertama berisi header: <code>nama_pegawai</code>, <code>email</code>, <code>role</code>, <code>password</code>.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top px-4 py-3">
+                        <button type="button" class="btn btn-light border px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success px-4 fw-semibold rounded-3"><i class="bi bi-upload me-1"></i> Unggah & Import</button>
                     </div>
                 </form>
             </div>

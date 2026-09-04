@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
+    <!-- CDN Chart.js untuk visualisasi grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; color: #1e293b; }
         .page-wrapper { max-width: 1320px; margin: 0 auto; }
@@ -61,6 +64,32 @@
             </form>
         </div>
 
+        <!-- Section Visualisasi Grafik & Legend Sanksi -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="card card-saas p-4 h-100">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-pie-chart-fill text-primary me-2"></i> Distribusi Status Kedisiplinan Karyawan</h6>
+                    <div style="height: 220px;" class="d-flex justify-content-center">
+                        <canvas id="disciplineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-saas p-4 h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle-fill text-info me-2"></i> Ambang Sanksi (Sesuai Kebijakan)</h6>
+                        <ul class="list-unstyled small text-muted mb-0">
+                            <li class="mb-2"><span class="badge bg-success me-1">0 Poin</span> Disiplin Sempurna</li>
+                            <li class="mb-2"><span class="badge bg-info text-dark me-1">1-5 Poin</span> Teguran Lisan (0%)</li>
+                            <li class="mb-2"><span class="badge bg-warning text-dark me-1">6-10 Poin</span> Pembinaan Atasan (-30%)</li>
+                            <li class="mb-2"><span class="badge bg-danger me-1">11-25 Poin</span> SP I (-40%)</li>
+                            <li><span class="badge bg-dark me-1">≥26 Poin</span> SP II & III (-60% s.d -100%)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Report Table Container -->
         <div class="card card-saas">
             <div class="card-body p-0">
@@ -111,5 +140,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Script Rendering Chart.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('disciplineChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sempurna (0 Poin)', 'Teguran Lisan (1-5 Poin)', 'Pembinaan (6-10 Poin)', 'Kena SP (≥11 Poin)'],
+                    datasets: [{
+                        data: [
+                            {{ $chartData['disiplin_tinggi'] ?? 0 }},
+                            {{ $chartData['teguran_lisan'] ?? 0 }},
+                            {{ $chartData['pembinaan'] ?? 0 }},
+                            {{ $chartData['sp'] ?? 0 }}
+                        ],
+                        backgroundColor: ['#16a34a', '#0284c7', '#d97706', '#dc2626']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

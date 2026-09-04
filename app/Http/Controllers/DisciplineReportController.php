@@ -25,7 +25,7 @@ class DisciplineReportController extends Controller
             $totalLate = $user->attendances->sum('late_minutes');
             $totalEarlyLeave = $user->attendances->sum('early_leave_minutes');
 
-            // Evaluasi berdasarkan sanksi bulanan PDF
+            // Evaluasi berdasarkan sanksi bulanan PDF Kebijakan
             $evaluation = DisciplineService::evaluateMonthlyPoints($totalPoints);
 
             return [
@@ -39,6 +39,15 @@ class DisciplineReportController extends Controller
             ];
         });
 
-        return view('reports.discipline', compact('reports', 'selectedMonth', 'selectedYear'));
+        // Agregasi statistik untuk Grafik Chart.js
+        $chartData = [
+            'disiplin_tinggi' => $reports->where('total_points', 0)->count(),
+            'teguran_lisan'   => $reports->whereBetween('total_points', [1, 5])->count(),
+            'pembinaan'       => $reports->whereBetween('total_points', [6, 10])->count(),
+            'sp'              => $reports->where('total_points', '>=', 11)->count(),
+        ];
+
+        // Memanggil view laporan/evaluasi-poin.blade.php
+        return view('laporan.evaluasi-poin', compact('reports', 'selectedMonth', 'selectedYear', 'chartData'));
     }
 }

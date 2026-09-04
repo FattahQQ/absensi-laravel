@@ -28,6 +28,14 @@
 </head>
 <body>
     <div class="page-wrapper py-5 px-3">
+        <!-- Alert Notifikasi Sukses -->
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <!-- Top Header & Breadcrumb -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
@@ -44,13 +52,13 @@
             </a>
         </div>
 
-        <!-- Metric Summary Cards (Berwarna & Rapi 3 Kolom) -->
+        <!-- Metric Summary Cards -->
         <div class="row g-4 mb-4">
             <div class="col-lg-4 col-md-6">
                 <div class="card card-saas stat-card-blue p-4 d-flex flex-row align-items-center justify-content-between">
                     <div>
                         <span class="text-primary small fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">Total Pegawai Aktif</span>
-                        <h3 class="fw-bold text-dark mb-0 mt-1 font-mono">48 <span class="fs-6 text-muted fw-normal font-sans">Personil</span></h3>
+                        <h3 class="fw-bold text-dark mb-0 mt-1 font-mono">{{ $totalPegawai ?? count($users) }} <span class="fs-6 text-muted fw-normal font-sans">Personil</span></h3>
                     </div>
                     <div class="bg-primary text-white p-3 rounded-4 fs-4 d-flex align-items-center justify-content-center shadow-sm" style="width: 52px; height: 52px;">
                         <i class="bi bi-people"></i>
@@ -61,7 +69,7 @@
                 <div class="card card-saas stat-card-green p-4 d-flex flex-row align-items-center justify-content-between">
                     <div>
                         <span class="text-success small fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">Departemen Terdaftar</span>
-                        <h3 class="fw-bold text-dark mb-0 mt-1 font-mono">6 <span class="fs-6 text-muted fw-normal font-sans">Divisi</span></h3>
+                        <h3 class="fw-bold text-dark mb-0 mt-1 font-mono">{{ $totalDivisi ?? 6 }} <span class="fs-6 text-muted fw-normal font-sans">Divisi</span></h3>
                     </div>
                     <div class="bg-success text-white p-3 rounded-4 fs-4 d-flex align-items-center justify-content-center shadow-sm" style="width: 52px; height: 52px;">
                         <i class="bi bi-building"></i>
@@ -89,10 +97,10 @@
                     <span class="fw-bold">Database Induk Pegawai & Organisasi</span>
                 </div>
                 <div class="d-flex align-items-center gap-3">
-                    <div class="search-box">
+                    <form action="{{ route('master.utama') }}" method="GET" class="search-box">
                         <i class="bi bi-search"></i>
-                        <input type="text" class="form-control" placeholder="Cari nama atau NIK...">
-                    </div>
+                        <input type="text" name="search" class="form-control" placeholder="Cari nama atau email..." value="{{ $search ?? '' }}" onchange="this.form.submit()">
+                    </form>
                     <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="bi bi-person-plus me-1"></i> Tambah Data Utama
                     </button>
@@ -105,35 +113,81 @@
                             <tr>
                                 <th class="py-3">No</th>
                                 <th class="py-3 text-start">Nama Pegawai</th>
-                                <th class="py-3">ID / NIK</th>
+                                <th class="py-3">Email / ID</th>
                                 <th class="py-3">Departemen</th>
                                 <th class="py-3">Status Akses</th>
                                 <th class="py-3">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="fw-bold text-muted font-mono">1</td>
-                                <td class="text-start fw-semibold text-dark">Abdul Fattah</td>
-                                <td class="font-mono text-primary">EMP-001</td>
-                                <td>Information Technology</td>
-                                <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-1 rounded-pill">Superadmin</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-light border text-primary px-2.5 py-1 rounded-2 me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                                    <button class="btn btn-sm btn-light border text-danger px-2.5 py-1 rounded-2" title="Hapus"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold text-muted font-mono">2</td>
-                                <td class="text-start fw-semibold text-dark">Muhammad Tegar Septian</td>
-                                <td class="font-mono text-primary">EMP-002</td>
-                                <td>Operational & Security</td>
-                                <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-1 rounded-pill">Manager</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-light border text-primary px-2.5 py-1 rounded-2 me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                                    <button class="btn btn-sm btn-light border text-danger px-2.5 py-1 rounded-2" title="Hapus"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
+                            @forelse($users as $index => $user)
+                                <tr>
+                                    <td class="fw-bold text-muted font-mono">{{ $index + 1 }}</td>
+                                    <td class="text-start fw-semibold text-dark">{{ $user->name }}</td>
+                                    <td class="font-mono text-primary">{{ $user->email }}</td>
+                                    <td>Information Technology</td>
+                                    <td>
+                                        <span class="badge bg-opacity-10 border px-3 py-1 rounded-pill 
+                                            {{ strtolower($user->role ?? '') == 'superadmin' ? 'bg-success text-success border-success' : 'bg-primary text-primary border-primary' }}">
+                                            {{ ucfirst($user->role ?? 'Pegawai') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-light border text-primary px-2.5 py-1 rounded-2 me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}" title="Edit"><i class="bi bi-pencil-square"></i></button>
+                                        <form action="{{ route('master.utama.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pegawai ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-light border text-danger px-2.5 py-1 rounded-2" title="Hapus"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal Edit Pegawai per User -->
+                                <div class="modal fade" id="editModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 rounded-4 shadow-lg text-start">
+                                            <div class="modal-header border-bottom px-4 py-3">
+                                                <h5 class="fw-bold text-dark mb-0 fs-6"><i class="bi bi-pencil-square text-primary me-2"></i> Edit Data Pegawai</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{{ route('master.utama.update', $user->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-body p-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold text-muted">Nama Lengkap</label>
+                                                        <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold text-muted">Email / ID Karyawan</label>
+                                                        <input type="email" name="email" class="form-control font-mono" value="{{ $user->email }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold text-muted">Password Baru (Opsional)</label>
+                                                        <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin diubah">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold text-muted">Hak Akses Sistem (Role)</label>
+                                                        <select name="role" class="form-select" required>
+                                                            <option value="superadmin" {{ $user->role == 'superadmin' ? 'selected' : '' }}>Superadmin</option>
+                                                            <option value="manager" {{ $user->role == 'manager' ? 'selected' : '' }}>Manager</option>
+                                                            <option value="pegawai" {{ $user->role == 'pegawai' ? 'selected' : '' }}>Pegawai / Staff</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer border-top px-4 py-3">
+                                                    <button type="button" class="btn btn-light border px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary-custom px-4">Simpan Perubahan</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-muted py-4">Data pegawai tidak ditemukan.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -144,46 +198,41 @@
     <!-- Modal Tambah Pegawai -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg text-start">
                 <div class="modal-header border-bottom px-4 py-3">
                     <h5 class="fw-bold text-dark mb-0 fs-6"><i class="bi bi-person-plus-fill text-primary me-2"></i> Tambah Data Induk Pegawai</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <form>
+                <form action="{{ route('master.utama.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Nama Lengkap</label>
-                            <input type="text" class="form-control" placeholder="Masukkan nama lengkap pegawai">
+                            <input type="text" name="name" class="form-control" placeholder="Masukkan nama lengkap pegawai" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Nomor Induk Karyawan (NIK)</label>
-                            <input type="text" class="form-control font-mono" placeholder="Contoh: EMP-003">
+                            <label class="form-label small fw-bold text-muted">Email / ID Karyawan</label>
+                            <input type="email" name="email" class="form-control font-mono" placeholder="nama@perusahaan.com" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Departemen / Divisi</label>
-                            <select class="form-select">
-                                <option selected>Pilih Departemen...</option>
-                                <option>Information Technology</option>
-                                <option>Operational & Security</option>
-                                <option>Human Resources</option>
-                                <option>Finance & Accounting</option>
-                            </select>
+                            <label class="form-label small fw-bold text-muted">Password Login</label>
+                            <input type="password" name="password" class="form-control" placeholder="Masukkan password awal" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Hak Akses Sistem (Role)</label>
-                            <select class="form-select">
-                                <option selected>Pilih Role...</option>
-                                <option>Superadmin</option>
-                                <option>Manager</option>
-                                <option>Pegawai / Staff</option>
+                            <select name="role" class="form-select" required>
+                                <option value="" selected disabled>Pilih Role...</option>
+                                <option value="superadmin">Superadmin</option>
+                                <option value="manager">Manager</option>
+                                <option value="pegawai">Pegawai / Staff</option>
                             </select>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer border-top px-4 py-3">
-                    <button type="button" class="btn btn-light border px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary-custom px-4">Simpan Data</button>
-                </div>
+                    </div>
+                    <div class="modal-footer border-top px-4 py-3">
+                        <button type="button" class="btn btn-light border px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary-custom px-4">Simpan Data</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

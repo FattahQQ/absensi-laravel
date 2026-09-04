@@ -8,20 +8,38 @@ use Illuminate\Support\Facades\Hash;
 
 class MasterUtamaController extends Controller
 {
-    // Menampilkan data pegawai + pencarian
+    // Menampilkan data pegawai dengan kondisi awal kosong jika belum ada filter / pencarian
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $filter = $request->input('filter');
 
-        $users = User::when($search, function ($query, $search) {
-            return $query->where('name', 'like', "%{$search}%")
-                         ->orWhere('email', 'like', "%{$search}%");
-        })->latest()->get();
+        // Jika tidak ada pencarian dan filter belum dipilih, biarkan collection kosong
+        if (!$search && !$filter) {
+            $users = collect();
+        } else {
+            $query = User::query();
+
+            // Saring berdasarkan pencarian kata kunci nama/email
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+
+            // Saring berdasarkan filter role (jika bukan 'semua')
+            if ($filter && $filter !== 'semua') {
+                $query->where('role', $filter);
+            }
+
+            $users = $query->latest()->get();
+        }
 
         $totalPegawai = User::count();
         $totalDivisi = 6;
 
-        return view('master.utama', compact('users', 'totalPegawai', 'totalDivisi', 'search'));
+        return view('master.utama', compact('users', 'totalPegawai', 'totalDivisi', 'search', 'filter'));
     }
 
     // Tambah pegawai baru
